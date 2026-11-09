@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruta del proyecto: feria de ciencias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f1f4f6; --surface:#ffffff; --surface-2:#e5ecf0; --ink:#13222c; --muted:#4f6370; --line:#cfdbe2;
+  --f1:#2f6fb3; --f2:#14867a; --f3:#b9700c; --f4:#c0392b; --f5:#8a3f7b;
+  --ok:#1d7340; --ok-bg:#dff2e6; --warn:#8a5a00; --warn-bg:#fdf0d5; --on:#ffffff;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c161d; --surface:#132129; --surface-2:#1b2e39; --ink:#e3ecf1; --muted:#9db1bd; --line:#2a4250;
+    --f1:#6aa8e8; --f2:#4cc3b3; --f3:#f0aa45; --f4:#f2786b; --f5:#cf8dc0;
+    --ok:#80d79c; --ok-bg:#163829; --warn:#f3c66b; --warn-bg:#3a2e12; --on:#0c161d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c161d; --surface:#132129; --surface-2:#1b2e39; --ink:#e3ecf1; --muted:#9db1bd; --line:#2a4250;
+  --f1:#6aa8e8; --f2:#4cc3b3; --f3:#f0aa45; --f4:#f2786b; --f5:#cf8dc0;
+  --ok:#80d79c; --ok-bg:#163829; --warn:#f3c66b; --warn-bg:#3a2e12; --on:#0c161d;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.55 var(--body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+:focus-visible{outline:3px solid var(--f3);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.01em}
+button{font:inherit}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand svg{width:30px;height:18px}
+.teamchip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:5px 12px;font-size:.9rem;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}
+
+main{max-width:920px;margin:0 auto;padding:18px 16px 48px}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:10px;padding:9px 16px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:6px 13px;cursor:pointer;font-size:.95rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* Configuración */
+.setup{max-width:560px;margin:10px auto}
+.setup h1{font-size:clamp(2rem,7vw,3rem);line-height:1;margin:10px 0 8px;letter-spacing:-.03em}
+.setup p{color:var(--muted)}
+.field{margin:20px 0}
+.field>span{display:block;font-weight:700;margin-bottom:8px}
+.field input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.err{color:var(--f4);font-weight:700;min-height:1.4em}
+
+/* Resumen */
+.summary{display:grid;grid-template-columns:auto 1fr;gap:16px 20px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+.ring{position:relative;width:104px;height:104px}
+.ring svg{width:104px;height:104px;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.6rem}
+.sum-txt h1{font-size:clamp(1.4rem,4.6vw,2rem);line-height:1.1;margin:0 0 4px}
+.sum-txt p{margin:2px 0;color:var(--muted)}
+.next{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:4px}
+.next small{color:var(--muted);font-weight:700}
+.next strong{font-size:1.1rem}
+.cal{grid-column:1 / -1;border-radius:10px;padding:10px 12px;font-size:.95rem}
+.cal.ok{background:var(--ok-bg);color:var(--ok)}
+.cal.warn{background:var(--warn-bg);color:var(--warn)}
+.cal.info{background:var(--surface-2);color:var(--ink)}
+
+/* Mapa general */
+.map{margin:22px 0 6px;overflow-x:auto}
+.map svg{display:block;min-width:560px;width:100%;height:auto}
+.map a{cursor:pointer}
+.map .lbl{font:700 12px var(--body);fill:var(--ink)}
+.map .sub{font:12px var(--body);fill:var(--muted)}
+.map .pct{font:800 13px var(--display)}
+
+.filters{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0 6px}
+.filters h2{margin:0;font-size:1.3rem}
+
+/* Ruta por fase */
+.phase{margin:26px 0 0;--c:var(--f1)}
+.ph-head{display:grid;grid-template-columns:44px 1fr auto;gap:2px 12px;align-items:center}
+.ph-num{grid-row:span 2;width:44px;height:44px;border-radius:50%;background:var(--c);color:var(--on);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.25rem}
+.ph-num.done{background:var(--ok)}
+.ph-head h3{margin:0;font-size:1.3rem;line-height:1.15}
+.ph-meta{color:var(--muted);font-size:.9rem}
+.ph-pct{grid-row:span 2;font-family:var(--display);font-weight:800;color:var(--c)}
+.ph-desc{margin:8px 0 0 56px;color:var(--muted);max-width:62ch}
+.stations{list-style:none;margin:10px 0 0;padding:0 0 0 21px}
+.st{position:relative;padding:0 0 0 35px;border-left:5px solid var(--c)}
+.st:last-child{border-left-color:transparent}
+.st:last-child::after{content:"";position:absolute;left:-5px;top:0;height:22px;width:5px;background:var(--c)}
+.st-btn{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;color:var(--ink);padding:8px 0 14px;cursor:pointer;position:relative}
+.dot{position:absolute;left:-49px;top:6px;width:22px;height:22px;border-radius:50%;border:4px solid var(--c);background:var(--surface);display:grid;place-items:center;color:var(--on);font-size:.8rem;font-weight:800;z-index:1}
+.st.done .dot{background:var(--c)}
+.st.done .t{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.st-body{display:grid;gap:3px}
+.t{font-weight:700}
+.role{font-size:.82rem;color:var(--muted)}
+.role b{color:var(--c)}
+.st-links{margin:-6px 0 14px}
+.st-links a{font-size:.9rem;color:var(--c);font-weight:700}
+.st.hide{display:none}
+.st.now .dot{box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 30%,transparent)}
+.rep{margin:10px 0 0 56px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.95rem}
+.empty{margin:8px 0 0 56px;color:var(--ok);font-weight:700}
+.feria{margin:26px 0 0;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;background:var(--surface);border:2px dashed var(--f4)}
+.feria b{font-family:var(--display);font-size:1.15rem}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}
+.status{color:var(--muted);font-size:.92rem;min-height:1.4em;margin-top:8px}
+.foot{color:var(--muted);font-size:.85rem;margin-top:22px}
+@media (max-width:520px){.summary{grid-template-columns:1fr}.ring{margin:0 auto}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="brand"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M2 14 L10 4 L20 14 L28 4" fill="none" stroke="var(--f4)" stroke-width="3" stroke-linejoin="round"/><circle cx="2" cy="14" r="2.5" fill="var(--f1)"/><circle cx="10" cy="4" r="2.5" fill="var(--f2)"/><circle cx="20" cy="14" r="2.5" fill="var(--f3)"/><circle cx="28" cy="4" r="2.5" fill="var(--f5)"/></svg>Ruta del proyecto</div>
+  <button class="teamchip" id="teamchip" hidden></button>
+</div></header>
+<main id="app"></main>
+
+<script>
+(function(){
+'use strict';
+/* Cambia esta dirección por la de la guía publicada (con / al final). */
+var GUIDE_URL='https://gabrielgjg.github.io/clima-y-agua/';
+var FERIA=new Date(2027,0,22);
+
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+var TEMAS=[
+  {id:'calentamiento',n:'Calentamiento global'},
+  {id:'invernadero',n:'Efecto invernadero'},
+  {id:'escenarios',n:'Impactos y escenarios futuros'},
+  {id:'agua',n:'Cuidado del agua: el problema'},
+  {id:'ahorro',n:'Soluciones y ahorro de agua'},
+  {id:'contaminacion',n:'Contaminación en la escuela'}
+];
+var GRUPOS=['A','B','C','D','E','F'];
+
+/* g: enlace a la guía (a = Aprende/Explora, r = Reflexiona, q = Compruébalo) */
+var PHASES=[
+ {n:'Introducción al tema',m:'M1 y M2',d:'30 nov – 1 dic',start:new Date(2026,10,30),c:'--f1',
+  desc:'Se arma el equipo, se descubre qué saben y qué quieren saber, y se define la pregunta que van a investigar.',
+  tasks:[
+   {id:'1a',t:'Formamos el equipo y asignamos los roles',r:'Coordinador'},
+   {id:'1b',t:'Llenamos la tabla SQA: qué sabemos y qué queremos saber',r:'Secretario'},
+   {id:'1c',t:'Exploramos «Aprende» y «Explora» de nuestro tema en la guía',r:'Todo el equipo',g:1},
+   {id:'1d',t:'Escribimos nuestra pregunta de indagación',r:'Analista'},
+   {id:'1e',t:'Escribimos 3 preguntas específicas para investigar',r:'Todo el equipo'}
+  ]},
+ {n:'Diseño de la investigación',m:'M3 a M5',d:'2 – 7 dic',start:new Date(2026,11,2),c:'--f2',
+  desc:'Se reparte la investigación, se reúne información confiable y se diseña el experimento o demostración.',
+  tasks:[
+   {id:'2a',t:'Hicimos el plan: qué investiga cada quien y en qué fuentes',r:'Coordinador'},
+   {id:'2b',t:'Cada integrante trajo su investigación en fichas',r:'Secretario lo registra'},
+   {id:'2c',t:'Respondimos las preguntas de «Reflexiona» de la guía',r:'Todo el equipo',g:1},
+   {id:'2d',t:'Elegimos nuestro experimento o demostración',r:'Todo el equipo'},
+   {id:'2e',t:'Escribimos hipótesis y procedimiento en la V de Gowin',r:'Analista'},
+   {id:'2f',t:'Hicimos la lista de materiales y quién trae cada uno',r:'Encargado de materiales'}
+  ]},
+ {n:'Organizar y estructurar las respuestas',m:'M6 a M10',d:'8 – 16 dic',start:new Date(2026,11,8),c:'--f3',
+  desc:'Se prueba el experimento, se analizan los datos, se prepara la exposición y se corrige con la retroalimentación.',
+  tasks:[
+   {id:'3a',t:'Realizamos la primera prueba del experimento',r:'Encargado de materiales'},
+   {id:'3b',t:'Registramos los datos en una tabla y tomamos fotos',r:'Secretario'},
+   {id:'3c',t:'Hicimos la gráfica y los cálculos',r:'Analista'},
+   {id:'3d',t:'Completamos la V de Gowin con la conclusión',r:'Analista'},
+   {id:'3e',t:'Hicimos el mini quiz de la guía y repasamos lo que faltó',r:'Todo el equipo',g:1},
+   {id:'3f',t:'Escribimos el guion: qué es, qué encontramos, qué reflexionamos y la demostración',r:'Todo el equipo'},
+   {id:'3g',t:'Hicimos el boceto del telón en una hoja',r:'Diseñador'},
+   {id:'3h',t:'Ensayamos ante otro equipo y recibimos su coevaluación',r:'Todo el equipo'},
+   {id:'3i',t:'Corregimos el experimento, el guion y el boceto',r:'Coordinador'}
+  ]},
+ {n:'Presentación de resultados',m:'M11 a M13 y feria',d:'17 dic – 22 ene',start:new Date(2026,11,17),c:'--f4',
+  desc:'Cada equipo presenta ante el grupo, se elige al representante y todo el grupo prepara el telón y la feria.',
+  tasks:[
+   {id:'4a',t:'Presentamos ante el grupo en 5 minutos',r:'Todo el equipo'},
+   {id:'4b',t:'Ensayamos la exposición completa con experimento y telón',r:'Equipo representante',rep:true},
+   {id:'4c',t:'Apoyamos al equipo representante en sus ensayos',r:'Todo el equipo',rep:false},
+   {id:'4d',t:'Ayudamos a trazar, pintar y fijar el telón del grupo',r:'Diseñador coordina'},
+   {id:'4e',t:'Sabemos qué comisión nos toca el día de la feria',r:'Coordinador'},
+   {id:'4f',t:'Participamos en la feria del 22 de enero',r:'Todo el equipo'}
+  ]},
+ {n:'Metacognición',m:'M14',d:'25 – 29 ene',start:new Date(2027,0,25),c:'--f5',
+  desc:'Se revisa lo aprendido, cómo se trabajó y qué se puede hacer después del proyecto.',
+  tasks:[
+   {id:'5a',t:'Hicimos la autoevaluación',r:'Cada integrante'},
+   {id:'5b',t:'Hicimos la coevaluación del equipo',r:'Cada integrante'},
+   {id:'5c',t:'Escribimos la reflexión final: qué aprendí, qué cambiaría y qué acción puedo hacer',r:'Cada integrante'}
+  ]}
+];
+
+var KEY='ruta-proyecto-feria-v1';
+var st={team:null,done:{},rep:false};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&typeof p==='object'){st.team=p.team||null;st.done=p.done||{};st.rep=!!p.rep;}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+
+var filter='all';
+var app=$('#app');
+
+function visibleTasks(ph){return ph.tasks.filter(function(t){return t.rep===undefined||t.rep===st.rep;});}
+function phaseStats(ph){var v=visibleTasks(ph),d=v.filter(function(t){return st.done[t.id];}).length;return {d:d,n:v.length,pct:v.length?Math.round(d/v.length*100):0};}
+function allStats(){var d=0,n=0;PHASES.forEach(function(ph){var s=phaseStats(ph);d+=s.d;n+=s.n;});return {d:d,n:n,pct:Math.round(d/n*100)};}
+function nextTask(){for(var i=0;i<PHASES.length;i++){var v=visibleTasks(PHASES[i]);for(var j=0;j<v.length;j++){if(!st.done[v[j].id])return {ph:i,t:v[j]};}}return null;}
+function temaOf(){var t=null;TEMAS.forEach(function(x){if(st.team&&x.id===st.team.tema)t=x;});return t;}
+function expectedPhase(){var now=new Date(),e=-1;PHASES.forEach(function(ph,i){if(now>=ph.start)e=i;});return e;}
+
+/* ---------- Configuración del equipo ---------- */
+function renderSetup(){
+  $('#teamchip').hidden=true;
+  var t=st.team||{};
+  app.innerHTML='<div class="setup"><h1>¿Dónde va nuestro proyecto?</h1>'+
+   '<p>Esta ruta muestra las cinco fases del proyecto para la feria de ciencias, lo que ya tiene tu equipo y lo que le falta. El avance se guarda en este dispositivo: úsenla siempre en el mismo celular o computadora.</p>'+
+   '<div class="field"><span>Grupo</span><div class="chips" id="s-g">'+GRUPOS.map(function(g){return '<button class="chip" data-v="'+g+'" aria-pressed="'+(t.grupo===g)+'">1° '+g+'</button>';}).join('')+'</div></div>'+
+   '<div class="field"><span>Tema del grupo</span><div class="chips" id="s-t">'+TEMAS.map(function(x){return '<button class="chip" data-v="'+x.id+'" aria-pressed="'+(t.tema===x.id)+'">'+x.n+'</button>';}).join('')+'</div></div>'+
+   '<label class="field"><span>Nombre del equipo</span><input id="s-n" maxlength="40" placeholder="Por ejemplo: Los Guardianes del Agua" value="'+esc(t.nombre||'')+'"></label>'+
+   '<p class="err" id="s-e" aria-live="polite"></p>'+
+   '<button class="btn" id="s-go">'+(st.team?'Guardar cambios':'Ver nuestra ruta')+'</button>'+
+   (st.team?' <button class="btn ghost" id="s-cancel">Cancelar</button>':'')+'</div>';
+  ['#s-g','#s-t'].forEach(function(id){$$(id+' .chip').forEach(function(c){c.onclick=function(){$$(id+' .chip').forEach(function(x){x.setAttribute('aria-pressed',String(x===c));});};});});
+  $('#s-go').onclick=function(){
+    var g=$('#s-g [aria-pressed="true"]'),tm=$('#s-t [aria-pressed="true"]'),n=$('#s-n').value.trim();
+    if(!g||!tm||!n){$('#s-e').textContent='Elige el grupo y el tema, y escribe el nombre del equipo.';return;}
+    st.team={grupo:g.dataset.v,tema:tm.dataset.v,nombre:n};save();renderMain();
+  };
+  if($('#s-cancel'))$('#s-cancel').onclick=renderMain;
+}
+
+/* ---------- Vista principal ---------- */
+function renderMain(){
+  var tema=temaOf(),all=allStats(),nx=nextTask(),ep=expectedPhase();
+  var chip=$('#teamchip');chip.hidden=false;chip.textContent=st.team.nombre+' · 1° '+st.team.grupo;chip.onclick=renderSetup;
+  var days=Math.ceil((FERIA-new Date())/86400000);
+  var R=44,C=2*Math.PI*R;
+  var curPh=nx?nx.ph:PHASES.length;
+  var cal;
+  if(!nx)cal='<div class="cal ok">¡Completaron toda la ruta! Excelente trabajo de equipo.</div>';
+  else if(ep<0)cal='<div class="cal info">El proyecto empieza el 30 de noviembre. Pueden ir revisando la guía de su tema.</div>';
+  else if(curPh<ep)cal='<div class="cal warn">Según el calendario ya deberían estar en la fase '+(ep+1)+', '+PHASES[ep].n.toLowerCase()+'. Revisen sus pendientes de la fase '+(curPh+1)+' con su coordinador.</div>';
+  else cal='<div class="cal ok">Van al día con el calendario del proyecto.</div>';
+
+  var html='<section class="summary"><div class="ring" role="img" aria-label="Avance total: '+all.pct+' por ciento"><svg viewBox="0 0 104 104"><circle cx="52" cy="52" r="'+R+'" fill="none" stroke="var(--surface-2)" stroke-width="12"/><circle cx="52" cy="52" r="'+R+'" fill="none" stroke="var(--ok)" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-all.pct/100))+'"/></svg><b>'+all.pct+'%</b></div>'+
+   '<div class="sum-txt"><h1>'+esc(st.team.nombre)+'</h1><p>1° '+st.team.grupo+', '+(tema?tema.n:'')+'</p><p>'+all.d+' de '+all.n+' pasos completados'+(days>0?' · faltan '+days+' días para la feria':'')+'</p></div>'+
+   (nx?'<div class="next"><small>Su siguiente paso</small><strong>'+nx.t.t+'</strong><span class="role">Fase '+(nx.ph+1)+', '+PHASES[nx.ph].n+'. Responsable: '+nx.t.r+'.</span></div>':'')+cal+'</section>';
+
+  /* Mapa general tipo flujograma */
+  var W=640,H=120,x0=50,step=(W-100)/5;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Mapa de las cinco fases del proyecto">';
+  svg+='<line x1="'+x0+'" y1="44" x2="'+(x0+step*5)+'" y2="44" stroke="var(--line)" stroke-width="8" stroke-linecap="round"/>';
+  PHASES.forEach(function(ph,i){
+    var x=x0+step*i,s=phaseStats(ph),col='var('+ph.c+')';
+    svg+='<line x1="'+x+'" y1="44" x2="'+(x+step*(s.pct/100))+'" y2="44" stroke="'+col+'" stroke-width="8" stroke-linecap="round"/>';
+  });
+  PHASES.forEach(function(ph,i){
+    var x=x0+step*i,s=phaseStats(ph),col='var('+ph.c+')',done=s.pct===100;
+    svg+='<a href="#fase'+(i+1)+'" aria-label="Fase '+(i+1)+': '+ph.n+', '+s.pct+' por ciento"><circle cx="'+x+'" cy="44" r="17" fill="'+(done?col:'var(--surface)')+'" stroke="'+col+'" stroke-width="5"/>'+
+      '<text x="'+x+'" y="49" text-anchor="middle" class="pct" fill="'+(done?'var(--on)':col)+'">'+(done?'✓':(i+1))+'</text>'+
+      '<text x="'+x+'" y="82" text-anchor="middle" class="lbl">Fase '+(i+1)+'</text><text x="'+x+'" y="98" text-anchor="middle" class="sub">'+s.pct+'%</text></a>';
+  });
+  var fx=x0+step*5;
+  svg+='<a href="#feria" aria-label="Feria"><rect x="'+(fx-15)+'" y="29" width="30" height="30" rx="6" fill="var(--f4)"/><text x="'+fx+'" y="50" text-anchor="middle" font-size="16">🏁</text><text x="'+fx+'" y="82" text-anchor="middle" class="lbl">Feria</text><text x="'+fx+'" y="98" text-anchor="middle" class="sub">22 ene</text></a>';
+  if(nx){var mx=x0+step*nx.ph;svg+='<text x="'+mx+'" y="18" text-anchor="middle" class="lbl">Aquí van</text>';}
+  svg+='</svg>';
+  html+='<div class="map">'+svg+'</div>';
+
+  html+='<div class="filters"><h2>La ruta, paso a paso</h2><div class="chips" role="group" aria-label="Mostrar">'+
+   [['all','Todo'],['todo','Lo que falta'],['done','Lo que tenemos']].map(function(f){return '<button class="chip" data-f="'+f[0]+'" aria-pressed="'+(filter===f[0])+'">'+f[1]+'</button>';}).join('')+'</div></div>';
+
+  PHASES.forEach(function(ph,i){
+    var s=phaseStats(ph),vt=visibleTasks(ph);
+    html+='<section class="phase" id="fase'+(i+1)+'" style="--c:var('+ph.c+')"><div class="ph-head"><div class="ph-num'+(s.pct===100?' done':'')+'" aria-hidden="true">'+(s.pct===100?'✓':(i+1))+'</div><h3>Fase '+(i+1)+'. '+ph.n+'</h3><span class="ph-pct">'+s.d+'/'+s.n+'</span><span class="ph-meta">'+ph.m+' · '+ph.d+'</span></div>'+
+      '<p class="ph-desc">'+ph.desc+'</p>';
+    if(i===3)html+='<div class="rep"><span>¿Su equipo fue elegido representante del grupo?</span><button class="chip" data-rep="1" aria-pressed="'+st.rep+'">Sí</button><button class="chip" data-rep="0" aria-pressed="'+(!st.rep)+'">No</button></div>';
+    var shown=0;
+    html+='<ol class="stations">'+vt.map(function(t){
+      var d=!!st.done[t.id],hide=(filter==='todo'&&d)||(filter==='done'&&!d);if(!hide)shown++;
+      var now=nx&&nx.t.id===t.id;
+      var link=t.g&&GUIDE_URL?'<div class="st-links"><a href="'+GUIDE_URL+'#'+st.team.tema+'" target="_blank" rel="noopener">Abrir la guía de nuestro tema</a></div>':'';
+      return '<li class="st'+(d?' done':'')+(hide?' hide':'')+(now?' now':'')+'"><button class="st-btn" data-t="'+t.id+'" role="checkbox" aria-checked="'+d+'"><span class="dot" aria-hidden="true">'+(d?'✓':'')+'</span><span class="st-body"><span class="t">'+t.t+'</span><span class="role">Responsable: <b>'+t.r+'</b>'+(now?' · siguiente paso':'')+'</span></span></button>'+link+'</li>';
+    }).join('')+'</ol>';
+    if(!shown)html+='<p class="empty">'+(filter==='todo'?'No les falta nada en esta fase.':'Todavía no completan pasos de esta fase.')+'</p>';
+    html+='</section>';
+    if(i===3)html+='<div class="feria" id="feria"><span style="font-size:1.8rem" aria-hidden="true">🏁</span><div><b>Feria de ciencias: viernes 22 de enero</b><br><span class="role">«De los datos a la acción»</span></div></div>';
+  });
+
+  html+='<div class="tools"><button class="btn" id="t-copy">Copiar resumen para el profesor</button><button class="btn ghost" id="t-edit">Cambiar datos del equipo</button><button class="btn ghost" id="t-reset">Borrar avance</button></div><p class="status" id="t-st" aria-live="polite"></p>'+
+    '<p class="foot">Toca un paso para marcarlo como hecho o desmarcarlo. Las fechas son tentativas y pueden cambiar según el calendario escolar.</p>';
+  app.innerHTML=html;
+
+  $$('.st-btn').forEach(function(b){b.onclick=function(){var id=b.dataset.t;if(st.done[id])delete st.done[id];else st.done[id]=true;save();var y=window.scrollY;renderMain();window.scrollTo(0,y);var nb=$('[data-t="'+id+'"]');if(nb)nb.focus({preventScroll:true});};});
+  $$('[data-f]').forEach(function(b){b.onclick=function(){filter=b.dataset.f;var y=window.scrollY;renderMain();window.scrollTo(0,y);};});
+  $$('[data-rep]').forEach(function(b){b.onclick=function(){st.rep=b.dataset.rep==='1';save();var y=window.scrollY;renderMain();window.scrollTo(0,y);};});
+  $('#t-edit').onclick=renderSetup;
+  $('#t-reset').onclick=function(){if(confirm('¿Borrar todo el avance marcado en este dispositivo? Los datos del equipo se conservan.')){st.done={};st.rep=false;save();renderMain();}};
+  $('#t-copy').onclick=function(){
+    var txt='Equipo: '+st.team.nombre+' (1° '+st.team.grupo+')\nTema: '+(tema?tema.n:'')+'\nAvance total: '+all.pct+'% ('+all.d+' de '+all.n+' pasos)\n';
+    PHASES.forEach(function(ph,i){var s=phaseStats(ph);txt+='\nFase '+(i+1)+'. '+ph.n+': '+s.d+'/'+s.n+'\n';visibleTasks(ph).forEach(function(t){txt+=(st.done[t.id]?'  [x] ':'  [ ] ')+t.t+'\n';});});
+    var msg=$('#t-st');
+    function ok(){msg.textContent='Resumen copiado. Pégalo en un mensaje para tu profesor.';}
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){msg.textContent='No se pudo copiar automáticamente.';}document.body.removeChild(ta);}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
+  };
+}
+
+if(st.team)renderMain();else renderSetup();
+})();
+</script>
+</body>
+</html>
